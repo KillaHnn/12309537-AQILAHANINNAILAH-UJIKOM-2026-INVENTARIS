@@ -5,19 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Items - Inventory App</title>
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
 
-    <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="font-sans antialiased text-gray-900 bg-white flex h-screen overflow-hidden" x-data="{ sidebarOpen: true, showAddModal: {{ $errors->any() ? 'true' : 'false' }}, showEditModal: false, editItem: {} }">
 
-    <!-- Sidebar Partial -->
     @include('partials.sidebar')
 
     <!-- Main Wrapper Content -->
@@ -133,7 +129,7 @@
                                 <td class="py-4 px-4 text-center">
                                     <div class="flex items-center justify-center space-x-2">
                                         <!-- Tombol Edit: kirim data lengkap termasuk repair dan nama kategori -->
-                                        <button @click="editItem = { id: {{ $item->id }}, category_name: '{{ $item->category->name }}', name: '{{ $item->name }}', total: {{ $item->total }}, repair: {{ $item->repair }}, new_broke: 0 }; showEditModal = true"
+                                        <button @click="editItem = { id: {{ $item->id }}, category_name: '{{ $item->category->name }}', name: '{{ $item->name }}', total: {{ $item->total }}, repair: {{ $item->repair }}, new_total: {{ $item->total }}, new_broke: 0 }; showEditModal = true"
                                                 class="inline-flex items-center px-4 py-1.5 bg-[#486096] hover:bg-[#3a5080] text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
                                             Edit
                                         </button>
@@ -249,9 +245,12 @@
 
                 <!-- Total (Read-Only / Hanya tampilan dengan suffix "item") -->
                 <div class="mb-5">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Total</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">New Total</label>
                     <div class="relative">
-                        <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700" x-text="editItem.total"></div>
+                        <input type="number" name="new_total" x-model="editItem.new_total" min="0"
+                            class="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#486096] focus:border-[#486096] transition-colors"
+                            :value="editItem.total"
+                            placeholder="0">
                         <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                             <span class="text-xs text-gray-400 font-medium italic">item</span>
                         </div>

@@ -44,20 +44,15 @@ class UserController extends Controller
             'role' => 'required|in:admin,staff',
         ]);
 
-        // Aturan password: 4 karakter awal email + nomor column (User::count + 1)
-        $emailPrefix = substr($request->email, 0, 4);
-        $userNumber = User::count() + 1;
-        $password = $emailPrefix . $userNumber;
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
-            'password' => bcrypt($password),
-            'initial_password' => $password, // Simpan password plain untuk keperluan export
+            'password' => bcrypt('password'), // Simpan password plain untuk keperluan export
         ]);
 
-        return back()->with('success', 'User berhasil ditambahkan! Password awal: ' . $password);
+        return back()->with('success', 'User berhasil ditambahkan! Password awal: ' . 'password');
     }
 
     /**
@@ -116,13 +111,5 @@ class UserController extends Controller
     /**
      * Reset password user (Operator) ke password default.
      */
-    public function resetPassword(User $user)
-    {
-        // Reset password ke default (misal: 'operator123' atau password dinamis)
-        $user->update([
-            'password' => bcrypt('operator123')
-        ]);
-
-        return back()->with('success', 'Password user ' . $user->name . ' berhasil di-reset!');
-    }
+    
 }

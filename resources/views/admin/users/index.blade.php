@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title }} - Inventory App</title>
     
-    <!-- Fonts -->
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
 
-    <!-- Scripts & Styles -->
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Alpine.js -->
+
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="font-sans antialiased text-gray-900 bg-white flex h-screen overflow-hidden" 
@@ -23,7 +23,6 @@
         editUser: { id: '', name: '', email: '', password: '' }
     }">
 
-    <!-- Sidebar Partial -->
     @include('partials.sidebar')
 
     <!-- Main Wrapper Content -->
@@ -81,7 +80,6 @@
                     <div>
                         <h3 class="text-xl font-bold text-gray-800">{{ $title }} Table</h3>
                         <p class="text-sm text-gray-500 mt-1">Add, delete, update <span class="text-[#486096] font-semibold">.{{ strtolower(str_replace(' ', '-', $title)) }}</span></p>
-                        <p class="text-[11px] text-pink-500 font-medium mt-1">p.s password 4 character of email and nomor.</p>
                     </div>
                     
                     <div class="flex items-center space-x-3">
@@ -255,14 +253,6 @@
                                                 class="inline-flex items-center px-4 py-1.5 bg-[#486096] hover:bg-[#3a5080] text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
                                                 Edit
                                             </button>
-                                        @else
-                                            <form action="{{ route('admin.users.reset-password', $user) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="inline-flex items-center px-4 py-1.5 bg-orange-400 hover:bg-orange-500 text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
-                                                    Reset Password
-                                                </button>
-                                            </form>
                                         @endif
 
                                         @if(auth()->id() !== $user->id)

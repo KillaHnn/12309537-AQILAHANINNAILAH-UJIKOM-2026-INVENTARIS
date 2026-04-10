@@ -5,19 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Dashboard - Inventory App</title>
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
 
-    <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="font-sans antialiased text-gray-900 bg-white flex h-screen overflow-hidden" x-data="{ sidebarOpen: true }">
 
-    <!-- Sidebar Partial -->
     @include('partials.sidebar')
 
     <!-- Main Wrapper Content -->
@@ -93,10 +89,87 @@
         <main class="flex-1 overflow-y-auto px-6 pb-6">
             <div class="w-full h-full min-h-[400px] border border-gray-100  bg-[#fbfcfc] p-6 shadow-sm">
                 <!-- Content here -->
-                <h3 class="text-xl font-bold text-gray-800 mb-4">Ruang Kontrol Admin</h3>
-                <p class="text-gray-600">
-                    Data utama diletakkan di sini. Sidebar biru sudah dikembalikan dan bisa Anda buka-tutup (Toggle) dengan menekan ikon Hamburger di kiri atas.
-                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Total Categories -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-gray-500 text-sm font-medium">Total Categories</h3>
+                        <p class="text-3xl font-bold text-gray-900 mt-1">{{ number_format(App\Models\Category::count()) }}</p>
+                    </div>
+
+                    <!-- Total Items -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-gray-500 text-sm font-medium">Total Items</h3>
+                        <p class="text-3xl font-bold text-gray-900 mt-1">{{ number_format(App\Models\Item::sum('total')) }}</p>
+                    </div>
+
+                    <!-- Total Users -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-gray-500 text-sm font-medium">Total Users</h3>
+                        <p class="text-3xl font-bold text-gray-900 mt-1">{{ number_format(App\Models\User::count()) }}</p>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-100 rounded-2xl p-8 shadow-sm">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Quick Actions</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <a href="{{ route('admin.categories.index') }}" class="group flex items-center p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all border-2 border-gray-200 hover:border-blue-300 hover:shadow-md">
+                            <div class="p-3 bg-white rounded-lg shadow-sm mr-5 group-hover:scale-110 transition-transform">
+                                <svg class="w-7 h-7 text-gray-600 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 text-lg mb-1">Manage Categories</h4>
+                                <p class="text-gray-600 text-sm">View, add, edit categories</p>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('admin.items.index') }}" class="group flex items-center p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all border-2 border-gray-200 hover:border-emerald-300 hover:shadow-md">
+                            <div class="p-3 bg-white rounded-lg shadow-sm mr-5 group-hover:scale-110 transition-transform">
+                                <svg class="w-7 h-7 text-gray-600 group-hover:text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 text-lg mb-1">Manage Items</h4>
+                                <p class="text-gray-600 text-sm">View, add, update items inventory</p>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('admin.users.admin') }}" class="group flex items-center p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all border-2 border-gray-200 hover:border-indigo-300 hover:shadow-md">
+                            <div class="p-3 bg-white rounded-lg shadow-sm mr-5 group-hover:scale-110 transition-transform">
+                                <svg class="w-7 h-7 text-gray-600 group-hover:text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 text-lg mb-1">Manage Users</h4>
+                                <p class="text-gray-600 text-sm">View admins & staff accounts</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </main>
     </div>

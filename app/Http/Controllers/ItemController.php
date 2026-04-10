@@ -36,7 +36,7 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validasi input dari form
+        // Validasi input dari form
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
@@ -50,7 +50,7 @@ class ItemController extends Controller
             'total.min' => 'Jumlah total tidak boleh kurang dari 0.',
         ]);
 
-        // 2. Membuat record item baru di database
+        // Membuat record item baru di database
         Item::create([
             'category_id' => $request->category_id,
             'name' => $request->name,
@@ -59,7 +59,7 @@ class ItemController extends Controller
             'lending' => 0,
         ]);
 
-        // 3. Redirect kembali ke halaman daftar items dengan pesan sukses
+        // Redirect kembali ke halaman daftar items dengan pesan sukses
         return redirect()->route('admin.items.index')
             ->with('success', 'Barang berhasil ditambahkan!');
     }
@@ -74,29 +74,52 @@ class ItemController extends Controller
      */
     public function update(Request $request, Item $item)
     {
-        // 1. Validasi input: memastikan jumlah kerusakan baru minimal 0
+        // Validasi input: memastikan jumlah kerusakan baru minimal 0
         $request->validate([
-            'total' => 'required|integer|min:0',
-            'new_broke_item' => 'required|integer|min:0',
+            'new_broke_item' => 'sometimes|integer|',
+            'new_total' => 'sometimes|integer|min:0',
         ], [
-            'new_broke_item.required' => 'Jumlah barang rusak baru wajib diisi.',
-            'new_broke_item.integer' => 'Jumlah harus berupa angka.',
-            'new_broke_item.min' => 'Jumlah tidak boleh kurang dari 0.',
+            'new_broke_item.integer' => 'Jumlah barang rusak baru harus berupa angka.',
+            'new_broke_item.min' => 'Jumlah barang rusak baru tidak boleh kurang dari 0.',
+            'new_total.integer' => 'Jumlah total harus berupa angka.',
+            'new_total.min' => 'Jumlah total tidak boleh kurang dari 0.',
         ]);
 
-        // 2. Mengambil jumlah kerusakan baru dari form
-        $newBroke = (int) $request->new_broke_item;
+        $updateData = [];
 
-        // Menambahkan jumlah kerusakan baru ke repair yang sudah ada (akumulasi)
-        $item->update([
-            'total' => $request->total,
-            'repair' => $item->repair + $newBroke,
-            'total' => $item->total - $newBroke,
-        ]);
+        // Handle new total update if provided
+        if ($request->filled('new_total')) {
+            $newTotal = (int) $request->new_total;
+            $updateData['total'] = max(0, $newTotal);
+        }
 
-        // Redirect kembali dengan pesan sukses
+        // Handle new broke item update if provided
+        if ($request->filled('new_broke_item')) {
+            $newBroke = (int) $request->new_broke_item;
+            $updateData['repair'] = $item->repair + $newBroke;
+            // Only subtract from total if no new_total provided
+            if (!isset($updateData['total'])) {
+                $updateData['total'] = $item->total - $newBroke;
+            }
+        }
+
+        if (!empty($updateData)) {
+            $item->update($updateData);
+        }
+
+        // Build success message
+        $message = 'Data berhasil diperbarui!';
+        if ($request->filled('new_broke_item')) {
+            $newBroke = (int) $request->new_broke_item;
+            $message = 'Data kerusakan barang berhasil diperbarui! (+' . $newBroke . ' item rusak)';
+        }
+        if ($request->filled('new_total')) {
+            $newTotal = (int) $request->new_total;
+            $message = 'Total barang berhasil diperbarui menjadi ' . $newTotal . ' item!';
+        }
+
         return redirect()->route('admin.items.index')
-            ->with('success', 'Data kerusakan barang berhasil diperbarui! (+' . $newBroke . ' item rusak)');
+            ->with('success', $message);
     }
 
     /**
@@ -105,10 +128,10 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
-        // 1. Menghapus data item dari database
+        // Menghapus data item dari database
         $item->delete();
 
-        // 2. Redirect kembali dengan pesan sukses
+        // Redirect kembali dengan pesan sukses
         return redirect()->route('admin.items.index')
             ->with('success', 'Barang berhasil dihapus!');
     }

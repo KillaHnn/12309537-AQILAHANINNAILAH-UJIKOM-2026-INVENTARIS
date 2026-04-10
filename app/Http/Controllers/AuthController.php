@@ -15,8 +15,8 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // 1. Melakukan validasi input dari user
-        // Memastikan email dan password diisi sesuai dengan format yang benar, dan pesannya dalam bahasa Indonesia
+        // Melakukan validasi input dari user
+        // Memastikan email dan password diisi sesuai dengan format yang benar, dan pesannya
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
@@ -26,7 +26,7 @@ class AuthController extends Controller
             'password.required' => 'Password tidak boleh kosong (wajib diisi).',
         ]);
 
-        // 2. Mengecek apakah checkbox "Remember Me" dicentang
+        // Mengecek apakah checkbox "Remember Me" dicentang
         $remember = $request->boolean('remember');
 
         // Mencoba melakukan proses autentikasi
@@ -47,7 +47,7 @@ class AuthController extends Controller
             return redirect('/');
         }
 
-        // 6. Jika login gagal, kembalikan user ke form login
+        // Jika login gagal, kembalikan user ke form login
         // Menyertakan pesan error pada field email
         return back()->withErrors([
             'email' => 'Email atau password yang Anda masukkan salah.',
@@ -56,16 +56,16 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // 1. Melakukan proses logout (menghapus data autentikasi user)
+        // Melakukan proses logout (menghapus data autentikasi user)
         Auth::logout();
 
-        // 2. Menghapus data session (invalidasi)
+        // Menghapus data session (invalidasi)
         $request->session()->invalidate();
 
-        // 3. Membuat ulang token CSRF (untuk keamanan saat mengakses form berikutnya)
+        // Membuat ulang token CSRF (untuk keamanan saat mengakses form berikutnya)
         $request->session()->regenerateToken();
 
-        // 4. Mengembalikan user ke halaman form login dan mengirim pesan sukses
+        // Mengembalikan user ke halaman form login dan mengirim pesan sukses
         return redirect('/login')->with('success', 'Anda telah berhasil keluar dari sistem (Logout).');
     }
 }

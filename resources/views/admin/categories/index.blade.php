@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Categories - Inventory App</title>
-    
-    <!-- Fonts -->
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
 
-    <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-    <!-- Alpine.js -->
+
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
+
 <body class="font-sans antialiased text-gray-900 bg-white flex h-screen overflow-hidden" x-data="{ sidebarOpen: true, showAddModal: {{ $errors->any() ? 'true' : 'false' }}, showEditModal: false, editCategory: {} }">
 
-    <!-- Sidebar Partial -->
     @include('partials.sidebar')
 
     <!-- Main Wrapper Content -->
@@ -30,13 +28,13 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
-                
+
                 <div class="flex items-center space-x-3 ml-2">
                     <img src="{{ asset('assets/images/wikrama-logo.png') }}" class="h-9 w-9 bg-blue-50 rounded-full" onerror="this.src='https://placehold.co/40x40?text=W'">
                     <h1 class="text-[1.1rem] font-bold text-black tracking-tight">Welcome back, {{ auth()->user()->name }}</h1>
                 </div>
             </div>
-            
+
             <div>
                 <p class="font-bold text-black tracking-tight">{{ now()->format('j F Y') }}</p>
             </div>
@@ -48,7 +46,7 @@
                 <div class="text-black font-semibold tracking-tight text-[1.05rem]">
                     Check menu in sidebar
                 </div>
-                
+
                 <div x-data="{ open: false }" class="relative">
                     <button @click="open = !open" @click.away="open = false" class="flex items-center space-x-3 focus:outline-none hover:opacity-80 transition-opacity p-1">
                         <div class="bg-[#486096] text-white h-8 w-8 rounded-full flex items-center justify-center shadow-sm border border-blue-200">
@@ -61,7 +59,7 @@
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
                     </button>
-                    
+
                     <div x-show="open" x-transition class="absolute right-0 mt-3 w-48 bg-white shadow-lg border border-gray-100 z-50 py-1" style="display: none;">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -80,28 +78,39 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-y-auto px-6 pb-6">
             <div class="w-full min-h-[400px] border border-gray-100 bg-[#fbfcfc] p-6 shadow-sm">
-                
+
                 <!-- Header Tabel: Judul + Tombol Add -->
                 <div class="flex items-center justify-between mb-6">
                     <div>
                         <h3 class="text-xl font-bold text-gray-800">Categories Table</h3>
                         <p class="text-sm text-gray-500 mt-1">Add, delete, update <span class="text-[#486096] font-semibold">.categories</span></p>
                     </div>
-                    
-                    <!-- Tombol Add Category -->
-                    <button @click="showAddModal = true" class="inline-flex items-center px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm rounded-lg shadow-sm transition-colors">
+
+                    <div class="flex items-center space-x-3">
+                        <!-- Tombol Export Excel -->
+                        <a href="{{ route('admin.categories.export') }}" class="inline-flex items-center px-4 py-2.5 bg-[#486096] hover:bg-[#3a5080] text-white font-semibold text-sm rounded-lg shadow-sm transition-colors">
+                            <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Export Excel
+                        </a>
+                        <!-- Tombol Add Category -->
+                        <button @click="showAddModal = true" class="inline-flex items-center px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm rounded-lg shadow-sm transition-colors">
                         <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                         </svg>
                         Add
                     </button>
+                    </div>
+                    <!-- Tombol Add Category -->
+                    
                 </div>
 
                 <!-- Alert Sukses -->
                 @if (session('success'))
-                    <div class="mb-4 py-3 px-4 rounded bg-green-100 text-green-800 border border-green-300">
-                        <p class="text-sm font-medium">{{ session('success') }}</p>
-                    </div>
+                <div class="mb-4 py-3 px-4 rounded bg-green-100 text-green-800 border border-green-300">
+                    <p class="text-sm font-medium">{{ session('success') }}</p>
+                </div>
                 @endif
 
                 <!-- Tabel Kategori -->
@@ -122,12 +131,12 @@
                                 <td class="py-4 px-4 text-sm text-gray-700">{{ $index + 1 }}</td>
                                 <td class="py-4 px-4 text-sm font-medium text-gray-800">{{ $category->name }}</td>
                                 <td class="py-4 px-4 text-sm text-gray-700">{{ $category->division_pj }}</td>
-                                <td class="py-4 px-4 text-sm text-gray-700"> </td>
+                                <td class="py-4 px-4 text-sm text-gray-700">{{ $category->items_count ?? 0 }}</td>
                                 <td class="py-4 px-4 text-center">
                                     <div class="flex items-center justify-center space-x-2">
                                         <!-- Tombol Edit -->
                                         <button @click="editCategory = { id: {{ $category->id }}, name: '{{ $category->name }}', division_pj: '{{ $category->division_pj }}' }; showEditModal = true"
-                                                class="inline-flex items-center px-4 py-1.5 bg-[#486096] hover:bg-[#3a5080] text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
+                                            class="inline-flex items-center px-4 py-1.5 bg-[#486096] hover:bg-[#3a5080] text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
                                             Edit
                                         </button>
                                         <!-- Tombol Delete -->
@@ -159,7 +168,7 @@
             <!-- Header Modal -->
             <h3 class="text-lg font-bold text-gray-800">Add Category Forms</h3>
             <p class="text-sm text-gray-500 mt-1 mb-6">Please <span class="text-red-500 font-semibold">.fill-all</span> input form with right value.</p>
-            
+
             <form method="POST" action="{{ route('admin.categories.store') }}">
                 @csrf
                 <!-- Input Nama Kategori -->
@@ -171,7 +180,7 @@
                         placeholder="Alat Dapur">
                     <!-- Pesan error validasi inline -->
                     @error('name')
-                        <p class="text-red-500 text-xs font-medium mt-1.5">{{ $message }}</p>
+                    <p class="text-red-500 text-xs font-medium mt-1.5">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -202,7 +211,7 @@
                     </div>
                     <!-- Pesan error validasi inline -->
                     @error('division_pj')
-                        <p class="text-red-500 text-xs font-medium mt-1.5">{{ $message }}</p>
+                    <p class="text-red-500 text-xs font-medium mt-1.5">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -220,7 +229,7 @@
         <div @click.away="showEditModal = false" class="bg-white rounded-lg shadow-xl w-full max-w-lg p-8 mx-4">
             <h3 class="text-lg font-bold text-gray-800">Edit Category Forms</h3>
             <p class="text-sm text-gray-500 mt-1 mb-6">Please <span class="text-red-500 font-semibold">.fill-all</span> input form with right value.</p>
-            
+
             <form method="POST" :action="'/admin/categories/' + editCategory.id">
                 @csrf
                 @method('PUT')
@@ -265,4 +274,5 @@
     </div>
 
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,6 +13,7 @@
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="font-sans antialiased text-gray-900">
     <div class="min-h-screen bg-white flex w-full">
         <!-- Left Side: Login Form -->
@@ -28,20 +30,20 @@
 
                 <!-- Alert Success -->
                 @if (session('success'))
-                    <div class="mb-6 py-3 px-4 rounded bg-green-100 text-green-800 border border-green-300">
-                        <p class="text-sm font-medium">{{ session('success') }}</p>
-                    </div>
+                <div class="mb-6 py-3 px-4 rounded bg-green-100 text-green-800 border border-green-300">
+                    <p class="text-sm font-medium">{{ session('success') }}</p>
+                </div>
                 @endif
 
                 <!-- Alert Errors -->
                 @if ($errors->any())
-                    <div class="mb-6 py-3 px-4 rounded bg-red-200 text-red-800 border border-red-300">
-                        <ul class="list-disc pl-5 text-sm font-medium">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <div class="mb-6 py-3 px-4 rounded bg-red-200 text-red-800 border border-red-300">
+                    <ul class="list-disc pl-5 text-sm font-medium">
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
                 @endif
 
                 <!-- Form -->
@@ -59,7 +61,7 @@
                     <!-- Password -->
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password <span class="text-red-500">*</span></label>
-                        <input id="password" type="password" name="password" 
+                        <input id="password" type="password" name="password"
                             class="block w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                             placeholder="minimum 8 characters">
                     </div>
@@ -86,7 +88,7 @@
 
                 <!-- Register Link -->
                 <p class="mt-8 text-sm text-gray-600 font-medium">
-                    Not registered yet? 
+                    Not registered yet?
                     <a href="#" class="font-bold text-black hover:underline transition-all">Create a new account</a>
                 </p>
             </div>
@@ -101,4 +103,5 @@
         </div>
     </div>
 </body>
+
 </html>

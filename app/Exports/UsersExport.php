@@ -54,7 +54,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping, WithStyl
         return [
             $user->name,
             $user->email,
-            $user->initial_password ?? 'This account already edited the password',
+            $user->password ?? 'This account already edited the password',
         ];
     }
 

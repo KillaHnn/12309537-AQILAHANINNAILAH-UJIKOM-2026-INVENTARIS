@@ -14,8 +14,21 @@ class Lending extends Model
         'lending_date',
         'return_date',
         'is_returned',
-        'user_id',
+        'user_id',        // Operator 1
+        'user_id_return', // Operator 2
     ];
+
+    // Relasi ke Operator yang meminjamkan (Operator 1)
+    public function operatorOut()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Relasi ke Operator yang menerima kembali (Operator 2)
+    public function operatorIn()
+    {
+        return $this->belongsTo(User::class, 'user_id_return');
+    }
 
     /**
      * Relasi ke Item.
@@ -23,13 +36,5 @@ class Lending extends Model
     public function item()
     {
         return $this->belongsTo(Item::class);
-    }
-
-    /**
-     * Relasi ke User (Staff/Operator).
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
     }
 }

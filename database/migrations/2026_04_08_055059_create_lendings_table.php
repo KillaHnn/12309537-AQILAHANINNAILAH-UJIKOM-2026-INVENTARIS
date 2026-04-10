@@ -20,6 +20,7 @@ return new class extends Migration
             $table->dateTime('lending_date'); // Tanggal pinjam
             $table->boolean('is_returned')->default(false); // Status kembali
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Diisi oleh siapa
+            $table->foreignId('user_id_return')->nullable()->constrained('users')->onDelete('set null'); // Diisi oleh siapa saat kembali
             $table->timestamps();
         });
     }

@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin'], func
 
     // CRUD Halaman Categories
     Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::get('/categories/export', [CategoryController::class, 'export'])->name('admin.categories.export');
     Route::post('/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');

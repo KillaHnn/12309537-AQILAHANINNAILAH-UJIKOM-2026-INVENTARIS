@@ -15,8 +15,10 @@ class LendingController extends Controller
      */
     public function index()
     {
-        $lendings = Lending::with(['item', 'user'])->latest()->get();
-        $items = Item::all(); // Untuk dropdown di modal Add
+        // Tambahkan 'operatorIn' (relasi baru yang kita buat di model)
+        // Load: item, operatorOut=user_id (who lent), operatorIn=user_id_return (who received return)
+        $lendings = Lending::with(['item', 'operatorOut', 'operatorIn'])->latest()->get();
+        $items = Item::all();
 
         return view('staff.lending.index', compact('lendings', 'items'));
     }
@@ -39,21 +41,21 @@ class LendingController extends Controller
         $itemIds = $request->item_id;
         $totals = $request->total;
 
-        // 1. Validasi Stok untuk Semua Item
+        // Validasi Stok untuk Semua Item
         foreach ($itemIds as $index => $id) {
             $item = Item::findOrFail($id);
             // Available = Total - Repair (Lending tidak dikurangi lagi karena sudah memotong Total)
             $available = $item->total - $item->repair;
-            
+
             if ($totals[$index] > $available) {
                 return back()->with('error', 'Total item more than available!')->withInput();
             }
         }
 
-        // 2. Simpan Data (Bulk)
+        // Simpan Data (Bulk)
         foreach ($itemIds as $index => $id) {
             $item = Item::findOrFail($id);
-            
+
             Lending::create([
                 'item_id' => $id,
                 'name' => $request->name,
@@ -83,14 +85,17 @@ class LendingController extends Controller
 
         $lending->update([
             'is_returned' => true,
-            'return_date' => now()
+            'return_date' => now(),
+            // SELESAIKAN CASE: Mencatat siapa yang memproses pengembalian
+            'user_id_return' => auth()->id(),
         ]);
 
         // Update stok: Tambah kembali ke Total, Kurangi Lending
         $lending->item->increment('total', $lending->total);
         $lending->item->decrement('lending', $lending->total);
 
-        return back()->with('success', 'Item is returned!');
+        // Pesan sukses yang lebih informatif
+        return back()->with('success', 'Item returned and verified by ' . auth()->user()->name);
     }
 
     /**
@@ -114,7 +119,7 @@ class LendingController extends Controller
      */
     public function showItemLendings(Item $item)
     {
-        $lendings = Lending::where('item_id', $item->id)->with('user')->latest()->get();
+        $lendings = Lending::where('item_id', $item->id)->with(['item', 'operatorOut', 'operatorIn'])->latest()->get();
         return view('admin.items.lending', compact('item', 'lendings'));
     }
 

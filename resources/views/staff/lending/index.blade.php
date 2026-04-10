@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lending - Inventory App</title>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
 
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="font-sans antialiased text-gray-900 bg-white flex h-screen overflow-hidden" 
-      x-data="{ 
+
+<body class="font-sans antialiased text-gray-900 bg-white flex h-screen overflow-hidden"
+    x-data="{ 
         sidebarOpen: true, 
         showAddModal: {{ $errors->any() ? 'true' : 'false' }},
         itemsList: [{ item_id: '', total: 1 }]
@@ -52,16 +54,22 @@
                 <div x-data="{ open: false }" class="relative">
                     <button @click="open = !open" @click.away="open = false" class="flex items-center space-x-3 focus:outline-none hover:opacity-80 transition-opacity p-1">
                         <div class="bg-[#486096] text-white h-8 w-8 rounded-full flex items-center justify-center shadow-sm border border-blue-200">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
                         </div>
                         <span class="font-bold text-black tracking-tight">{{ auth()->user()->name }}</span>
-                        <svg class="h-5 w-5 text-black" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                        <svg class="h-5 w-5 text-black" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
                     </button>
                     <div x-show="open" x-transition class="absolute right-0 mt-3 w-48 bg-white shadow-lg border border-gray-100 z-50 py-1" style="display: none;">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="w-full text-left px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center">
-                                <svg class="mr-3 h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                                <svg class="mr-3 h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
                                 Logout
                             </button>
                         </form>
@@ -73,7 +81,7 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-y-auto px-6 pb-6">
             <div class="w-full min-h-[400px] border border-gray-100 bg-[#fbfcfc] p-6 shadow-sm">
-                
+
                 <!-- Header Tabel: Judul + Tombol -->
                 <div class="flex items-center justify-between mb-6">
                     <div>
@@ -101,22 +109,22 @@
 
                 <!-- Alert Success -->
                 @if (session('success'))
-                    @if (str_contains(strtolower(session('success')), 'deleted'))
-                        <div class="mb-4 py-3 px-4 rounded bg-orange-100 text-orange-800 border border-orange-200">
-                            <p class="text-sm font-medium">{{ session('success') }}</p>
-                        </div>
-                    @else
-                        <div class="mb-4 py-3 px-4 rounded bg-green-100 text-green-800 border border-green-300">
-                            <p class="text-sm font-medium">{{ session('success') }}</p>
-                        </div>
-                    @endif
+                @if (str_contains(strtolower(session('success')), 'deleted'))
+                <div class="mb-4 py-3 px-4 rounded bg-orange-100 text-orange-800 border border-orange-200">
+                    <p class="text-sm font-medium">{{ session('success') }}</p>
+                </div>
+                @else
+                <div class="mb-4 py-3 px-4 rounded bg-green-100 text-green-800 border border-green-300">
+                    <p class="text-sm font-medium">{{ session('success') }}</p>
+                </div>
+                @endif
                 @endif
 
                 <!-- Alert Error (Stok) -->
                 @if (session('error'))
-                    <div class="mb-4 py-3 px-4 rounded bg-red-100 text-red-800 border border-red-300">
-                        <p class="text-sm font-medium">{{ session('error') }}</p>
-                    </div>
+                <div class="mb-4 py-3 px-4 rounded bg-red-100 text-red-800 border border-red-300">
+                    <p class="text-sm font-medium">{{ session('error') }}</p>
+                </div>
                 @endif
 
                 <!-- Tabel Peminjaman -->
@@ -146,38 +154,40 @@
                                 <td class="py-4 px-4 text-sm text-gray-700 text-center">{{ \Carbon\Carbon::parse($lending->lending_date)->format('d F, Y') }}</td>
                                 <td class="py-4 px-4 text-sm text-center">
                                     @if($lending->is_returned)
-                                        <div class="px-3 py-1 text-[11px] font-bold border border-emerald-200 bg-emerald-50 text-emerald-500 rounded-md inline-block">
-                                            {{ \Carbon\Carbon::parse($lending->return_date)->format('d F, Y') }}
-                                        </div>
+                                    <div class="px-3 py-1 text-[11px] font-bold border border-emerald-200 bg-emerald-50 text-emerald-500 rounded-md inline-block">
+                                        {{ \Carbon\Carbon::parse($lending->return_date)->format('d F, Y') }}
+                                    </div>
                                     @else
-                                        <span class="px-3 py-1 text-[10px] font-bold border border-orange-200 bg-orange-50 text-orange-400 rounded-md">
-                                            not returned
-                                        </span>
+                                    <span class="px-3 py-1 text-[10px] font-bold border border-orange-200 bg-orange-50 text-orange-400 rounded-md">
+                                        not returned
+                                    </span>
                                     @endif
                                 </td>
                                 <td class="py-4 px-4 text-sm text-center font-bold text-gray-900 leading-tight">
-                                    <span class="block">operator</span>
-                                    <span class="block">{{ strtolower(explode(' ', $lending->user->name)[0]) }}</span>
+                                    <div class="mb-1">
+                                        <span class="block text-[10px] text-gray-400 uppercase italic">Out by:</span>
+{{ explode(' ', $lending->operatorOut->name)[0] }}
+                                    </div>
+
+                                    @if($lending->is_returned && $lending->user_id_return)
+                                    <div class="border-t border-gray-100 mt-1 pt-1">
+                                        <span class="block text-[10px] text-gray-400 uppercase italic">In by:</span>
+                                        <span class="block text-emerald-600">{{ explode(' ', $lending->operatorIn->name)[0] }}</span>
+                                    </div>
+                                    @endif
                                 </td>
                                 <td class="py-4 px-4 text-center">
                                     <div class="flex items-center justify-center space-x-2">
                                         @if(!$lending->is_returned)
-                                            <form method="POST" action="{{ route('staff.lending.return', $lending) }}">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="inline-flex items-center px-4 py-1.5 bg-orange-400 hover:bg-orange-500 text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
-                                                    Returned
-                                                </button>
-                                            </form>
-                                        @endif
-
-                                        <form method="POST" action="{{ route('staff.lending.destroy', $lending) }}" onsubmit="return confirm('Hapus data peminjaman ini?')">
+                                        <form method="POST" action="{{ route('staff.lending.return', $lending) }}">
                                             @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center px-4 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
-                                                Delete
+                                            @method('PATCH')
+                                            <button type="submit" class="inline-flex items-center px-4 py-1.5 bg-orange-400 hover:bg-orange-500 text-white text-xs font-semibold rounded-lg transition-colors shadow-sm">
+                                                Returned
                                             </button>
                                         </form>
+                                        @endif
+
                                     </div>
                                 </td>
                             </tr>
@@ -199,7 +209,7 @@
             <div class="p-8 overflow-y-auto">
                 <h3 class="text-lg font-bold text-gray-800">Lending Form</h3>
                 <p class="text-sm text-gray-500 mt-1 mb-6">Please <span class="text-red-500 font-semibold">.fill-all</span> input form with right value.</p>
-                
+
                 <form method="POST" action="{{ route('staff.lending.store') }}">
                     @csrf
                     <!-- Borrower Name -->
@@ -216,7 +226,9 @@
                             <!-- Remove Button -->
                             <button type="button" @click="itemsList.splice(index, 1)" x-show="itemsList.length > 1"
                                 class="absolute top-2 right-2 text-white bg-red-500 p-1 rounded-sm hover:bg-red-600 transition-colors">
-                            <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
                             </button>
 
                             <!-- Item Selection -->
@@ -226,7 +238,7 @@
                                     class="w-full px-4 py-3 bg-white border border-gray-100 rounded-lg text-sm appearance-none focus:ring-2 focus:ring-[#486096] focus:border-[#486096] transition-colors">
                                     <option value="" disabled selected>Select Items</option>
                                     @foreach ($items as $itm)
-                                        <option value="{{ $itm->id }}">{{ $itm->name }} (Available: {{ $itm->total - $itm->repair }})</option>
+                                    <option value="{{ $itm->id }}">{{ $itm->name }} (Available: {{ $itm->total - $itm->repair }})</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -243,9 +255,11 @@
 
                     <!-- More Link -->
                     <div class="mb-8">
-                        <button type="button" @click="itemsList.push({ item_id: '', total: 1 })" 
+                        <button type="button" @click="itemsList.push({ item_id: '', total: 1 })"
                             class="flex items-center text-sm font-semibold text-cyan-400 hover:text-cyan-500 transition-colors">
-                            <svg class="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                            <svg class="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
                             More
                         </button>
                     </div>
@@ -272,4 +286,5 @@
     </div>
 
 </body>
+
 </html>
